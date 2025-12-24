@@ -98,7 +98,136 @@ interface UIOverlayProps {
   isLiveActive?: boolean;
   liveStatus?: 'disconnected' | 'connecting' | 'connected' | 'speaking';
   onToggleLive?: () => void;
+  // TEXTURE MODAL CALLBACK
+  onTexturesSelected?: (type: 'sphere' | 'cube', images: string[]) => void;
 }
+
+// --- TEXTURE SELECT MODAL ---
+const TextureModal: React.FC<{
+    type: 'sphere' | 'cube';
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: (images: string[]) => void;
+    currentImages: string[];
+    availableImages: string[]; // Galerideki resimler
+}> = ({ type, isOpen, onClose, onConfirm, currentImages, availableImages }) => {
+    const [selectedImages, setSelectedImages] = useState<string[]>([]);
+    const maxImages = type === 'sphere' ? 1 : 6;
+
+    useEffect(() => {
+        if (isOpen) {
+            setSelectedImages(currentImages || []);
+        }
+    }, [isOpen, currentImages]);
+
+    const toggleImageSelection = (img: string) => {
+        if (type === 'sphere') {
+            // Sphere: Tek seçim, direkt değiştir
+            setSelectedImages([img]);
+        } else {
+            // Cube: Çoklu seçim (Max 6)
+            if (selectedImages.includes(img)) {
+                setSelectedImages(prev => prev.filter(i => i !== img));
+            } else {
+                if (selectedImages.length < maxImages) {
+                    setSelectedImages(prev => [...prev, img]);
+                }
+            }
+        }
+    };
+
+    const removeImage = (index: number) => {
+        setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-300" onPointerDown={(e) => e.stopPropagation()}>
+            <div className="bg-[#111]/90 border border-white/20 p-6 rounded-3xl w-full max-w-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] backdrop-blur-xl relative flex flex-col items-center max-h-[90vh]">
+                <h3 className="text-white font-mono text-lg font-bold mb-1 tracking-widest uppercase">
+                    {type === 'sphere' ? 'Küre Dokusu Seçimi' : 'Küp Dokusu Seçimi'}
+                </h3>
+                <p className="text-gray-400 text-xs mb-4 font-mono text-center">
+                    {type === 'sphere' ? 'Aşağıdaki galeriden küre yüzeyi için 1 resim seçin.' : 'Küp yüzeyleri için galeriden en fazla 6 resim seçin.'}
+                </p>
+
+                {/* --- SEÇİLENLER (PREVIEW AREA) --- */}
+                <div className="w-full bg-black/40 rounded-xl p-3 mb-4 border border-white/10 min-h-[100px]">
+                    <div className="text-[10px] text-gray-500 font-bold mb-2 uppercase tracking-wider">Aktif Dokular ({selectedImages.length}/{maxImages})</div>
+                    <div className="flex gap-2 flex-wrap">
+                        {selectedImages.length > 0 ? (
+                            selectedImages.map((img, idx) => (
+                                <div key={idx} className="w-16 h-16 rounded-lg bg-gray-800 relative group border border-blue-500 overflow-hidden shadow-lg animate-in zoom-in duration-200">
+                                    <img src={img} alt="Selected" className="w-full h-full object-cover" />
+                                    <button 
+                                        onClick={() => removeImage(idx)}
+                                        className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-600 rounded-full text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 shadow-sm"
+                                    >
+                                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+                                    </button>
+                                    <div className="absolute bottom-0 left-0 right-0 bg-blue-600/80 text-[8px] text-white text-center font-bold">{idx + 1}</div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-gray-600 text-xs italic w-full text-center py-4">Henüz doku seçilmedi.</div>
+                        )}
+                    </div>
+                </div>
+
+                {/* --- GALERİ (AVAILABLE IMAGES) --- */}
+                <div className="w-full flex-1 overflow-y-auto custom-thin-scrollbar pr-1">
+                    <div className="text-[10px] text-gray-500 font-bold mb-2 uppercase tracking-wider sticky top-0 bg-[#111]/95 py-1 z-10">Galeriniz</div>
+                    {availableImages.length > 0 ? (
+                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                            {availableImages.map((img, idx) => {
+                                const isSelected = selectedImages.includes(img);
+                                return (
+                                    <div 
+                                        key={idx} 
+                                        onClick={() => toggleImageSelection(img)}
+                                        className={`aspect-square rounded-lg relative cursor-pointer overflow-hidden transition-all duration-200 hover:scale-105 border-2 ${isSelected ? 'border-green-500 ring-2 ring-green-500/30' : 'border-transparent hover:border-white/30'}`}
+                                    >
+                                        <img src={img} alt={`Gallery ${idx}`} className={`w-full h-full object-cover ${isSelected ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`} />
+                                        {isSelected && (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-green-900/40">
+                                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="text-gray-500 text-xs text-center py-10 border-2 border-dashed border-white/10 rounded-xl">
+                            <p>Galerinizde resim yok.</p>
+                            <p className="text-[10px] opacity-60 mt-1">Önce ana ekrandan resim yükleyin veya AI ile üretin.</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* ACTIONS */}
+                <div className="flex gap-3 w-full mt-6 pt-4 border-t border-white/10">
+                    <button 
+                        onClick={onClose} 
+                        className="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 transition-colors font-bold text-xs"
+                    >
+                        İPTAL
+                    </button>
+                    <button 
+                        onClick={() => onConfirm(selectedImages)} 
+                        className={`flex-1 py-3 rounded-xl font-bold text-xs transition-all shadow-lg text-white ${selectedImages.length > 0 ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-900/50' : 'bg-gray-700 cursor-not-allowed opacity-50'}`}
+                        disabled={selectedImages.length === 0}
+                    >
+                        UYGULA
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const ImageDeck: React.FC<{
     images: string[];
@@ -189,7 +318,7 @@ const ImageDeck: React.FC<{
 };
 
 export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({ 
-  onSubmit, onImageUpload, onDrawingStart, onDrawingConfirm, isDrawing, brushSize, onBrushSizeChange, canvasRotation, onRotateX, onRotateY, onRotateZ, currentColor, onColorChange, onResetColors, isOriginalColors, onInteractionStart, onInteractionEnd, hasImage, depthIntensity, onDepthChange, repulsionStrength, onRepulsionChange, repulsionRadius, onRadiusChange, particleCount, onParticleCountChange, particleSize, onParticleSizeChange, modelDensity, onModelDensityChange, activePreset, onPresetChange, onAudioChange, audioMode, audioTitle, isPlaying = true, onTogglePlay, volume = 0.5, onVolumeChange, onResetAll, onClearCanvas, bgMode, onBgModeChange, onBgImageConfirm, customBgColor, currentShape, onShapeChange, isWidgetMinimized, isUIHidden, onToggleUI, isSceneVisible = true, onToggleScene, bgImages = [], onBgImagesAdd, onBgImageSelect, onBgImageStyleChange, bgImageStyle = 'cover', onRemoveBgImage, onBgPositionChange, onBgTransformChange, onResetDeck, slideshowSettings, onSlideshowSettingsChange, isAutoRotating = true, onToggleAutoRotation, useLyricParticles = false, onToggleLyricParticles, hasLyrics = false, useLyricEcho = false, onToggleLyricEcho, generatedImages = [], generatedPrompts = [], songInfo, showInfoPanel = true, onToggleInfoPanel, isMoodSyncActive, onToggleMoodSync, enableBloom = false, onToggleBloom, enableTrails = false, onToggleTrails, showLyrics = false, onToggleShowLyrics, isLiveActive, liveStatus, onToggleLive
+  onSubmit, onImageUpload, onDrawingStart, onDrawingConfirm, isDrawing, brushSize, onBrushSizeChange, canvasRotation, onRotateX, onRotateY, onRotateZ, currentColor, onColorChange, onResetColors, isOriginalColors, onInteractionStart, onInteractionEnd, hasImage, depthIntensity, onDepthChange, repulsionStrength, onRepulsionChange, repulsionRadius, onRadiusChange, particleCount, onParticleCountChange, particleSize, onParticleSizeChange, modelDensity, onModelDensityChange, activePreset, onPresetChange, onAudioChange, audioMode, audioTitle, isPlaying = true, onTogglePlay, volume = 0.5, onVolumeChange, onResetAll, onClearCanvas, bgMode, onBgModeChange, onBgImageConfirm, customBgColor, currentShape, onShapeChange, isWidgetMinimized, isUIHidden, onToggleUI, isSceneVisible = true, onToggleScene, bgImages = [], onBgImagesAdd, onBgImageSelect, onBgImageStyleChange, bgImageStyle = 'cover', onRemoveBgImage, onBgPositionChange, onBgTransformChange, onResetDeck, slideshowSettings, onSlideshowSettingsChange, isAutoRotating = true, onToggleAutoRotation, useLyricParticles = false, onToggleLyricParticles, hasLyrics = false, useLyricEcho = false, onToggleLyricEcho, generatedImages = [], generatedPrompts = [], songInfo, showInfoPanel = true, onToggleInfoPanel, isMoodSyncActive, onToggleMoodSync, enableBloom = false, onToggleBloom, enableTrails = false, onToggleTrails, showLyrics = false, onToggleShowLyrics, isLiveActive, liveStatus, onToggleLive, onTexturesSelected
 }, ref) => {
   const [inputValue, setInputValue] = useState('');
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
@@ -233,6 +362,11 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
   const cropImageRef = useRef<HTMLImageElement>(null);
   const [pendingImage, setPendingImage] = useState<string | null>(null);
   
+  // TEXTURE MODAL STATES
+  const [activeTextureModal, setActiveTextureModal] = useState<'sphere' | 'cube' | null>(null);
+  const [sphereTextures, setSphereTextures] = useState<string[]>([]);
+  const [cubeTextures, setCubeTextures] = useState<string[]>([]);
+
   const isLightMode = bgMode === 'light';
   const isAnyMenuOpen = isSettingsOpen || isThemeMenuOpen || isShapeMenuOpen || isBgPaletteOpen || isPaletteOpen || showMusicSettings || deckShowSettings || showResetMenu;
   const actualAudioInputRef = (ref as React.RefObject<HTMLInputElement>) || audioInputRef;
@@ -288,6 +422,32 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
   const isUnknownArtist = songInfo?.artistBio === "Bilinmeyen Sanatçı" || songInfo?.artistName === "AI Artist";
   const toggleInfoExpand = (e: React.MouseEvent) => { e.stopPropagation(); setIsInfoExpanded(!isInfoExpanded); };
   const handleInfoBackdropClick = (e: React.MouseEvent) => { e.stopPropagation(); setIsInfoExpanded(false); };
+
+  // HANDLE TEXTURE MODAL CONFIRM
+  const handleTextureConfirm = (images: string[]) => {
+      if (activeTextureModal === 'sphere') {
+          setSphereTextures(images);
+          // Apply immediately via existing logic if it's a single sphere image
+          if (images.length > 0) {
+              onImageUpload(images[0], useOriginalImageColors);
+          }
+      } else if (activeTextureModal === 'cube') {
+          setCubeTextures(images);
+          // For Cube, we save it for Phase 3 but still call upload with the first one to show feedback
+          // if (images.length > 0) onImageUpload(images[0], useOriginalImageColors); 
+      }
+      
+      if (onTexturesSelected && activeTextureModal) {
+          onTexturesSelected(activeTextureModal, images);
+      }
+      setActiveTextureModal(null);
+  };
+
+  const hasSphereTexture = sphereTextures.length > 0;
+  const hasCubeTexture = cubeTextures.length > 0;
+
+  // Tüm havuz: Manuel yüklenenler + AI Üretilenler
+  const allAvailableImages = [...bgImages, ...generatedImages].filter((v, i, a) => a.indexOf(v) === i); // Unique
 
   return (
     <>
@@ -362,9 +522,20 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
       <input type="file" accept="audio/*" ref={actualAudioInputRef} onChange={handleAudioSelect} className="hidden" />
       <input type="file" accept="image/*" multiple ref={bgImageInputRef} onChange={handleBgImagesSelect} className="hidden" />
 
+      {/* --- TEXTURE MODAL --- */}
+      <TextureModal 
+          type={activeTextureModal || 'sphere'} 
+          isOpen={!!activeTextureModal} 
+          onClose={() => setActiveTextureModal(null)} 
+          onConfirm={handleTextureConfirm} 
+          currentImages={activeTextureModal === 'sphere' ? sphereTextures : cubeTextures}
+          availableImages={allAvailableImages}
+      />
+
       {/* --- MÜZİK ÇALAR WIDGET --- */}
       {(audioMode !== 'none' && (!isUIHidden || musicShowInCleanMode) && !isDrawing) && (
           <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[60] group/player pb-10">
+              {/* ... (Müzik Çalar Kodu Aynı Kalıyor) ... */}
               <div className={`absolute top-12 right-0 mt-1 flex gap-1 transition-all duration-300 transform ${isMusicPlayerMinimized ? 'opacity-0 pointer-events-none scale-0' : 'opacity-0 -translate-y-2 group-hover/player:opacity-100 group-hover/player:translate-y-0 scale-100'} `}>
                    <button onClick={(e) => { e.stopPropagation(); setShowMusicSettings(!showMusicSettings); }} className="p-1.5 bg-black/60 hover:bg-black/80 backdrop-blur-md rounded-full text-white/80 hover:text-white border border-white/10 transition-colors shadow-sm" title="Ayarlar"> <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={showMusicSettings ? 'rotate-90' : ''}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 0-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> </button>
                    <button onClick={(e) => { e.stopPropagation(); setIsMusicPlayerMinimized(true); setShowMusicSettings(false); }} className="p-1.5 bg-black/60 hover:bg-black/80 backdrop-blur-md rounded-full text-white/80 hover:text-white border border-white/10 transition-colors shadow-sm" title="Simge Durumuna Küçült"> <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg> </button>
@@ -470,25 +641,33 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
                 <div className={`absolute top-full flex flex-col gap-1 items-center w-10 pt-1 ${isShapeMenuOpen ? 'shape-menu-open' : ''}`}> 
                     
                     {/* Küre Butonu (Wrapper ile) */}
-                    <div className="theme-menu-item item-1 relative flex items-center justify-center w-full group/sphere mb-1">
-                        {/* Doku Butonu (Texture) */}
-                        <button disabled={!hasImage} className={`absolute right-full mr-1 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${hasImage ? 'bg-gray-900 border-2 border-cyan-400 text-cyan-200 shadow-[0_0_20px_cyan] hover:bg-gray-800 hover:scale-110 animate-pulse' : 'bg-gray-900/80 text-gray-600 cursor-not-allowed border-gray-700 opacity-0'} group-hover/sphere:opacity-100 group-hover/sphere:delay-0 delay-150 translate-x-4 group-hover/sphere:translate-x-0 pointer-events-none group-hover/sphere:pointer-events-auto`} title={hasImage ? "Resim Dokusunu Uygula" : "Önce Resim Yükleyin"}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${hasImage ? 'animate-bounce' : ''}`}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <div className="theme-menu-item item-1 relative flex items-center justify-center w-full group/sphere mb-1" style={{ overflow: 'visible' }}>
+                        {/* Doku Butonu (Texture) - Pop-up Tetiği */}
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); setActiveTextureModal('sphere'); setIsShapeMenuOpen(false); }}
+                            className={`absolute right-[100%] mr-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-[-1] ${hasSphereTexture ? 'bg-gray-900 border-2 border-cyan-400 text-cyan-200 shadow-[0_0_20px_cyan] hover:bg-gray-800 hover:scale-110 animate-pulse' : 'bg-gray-900 border border-white/20 text-gray-400 hover:bg-cyan-900/50 hover:text-cyan-200 hover:border-cyan-500/50'} group-hover/sphere:translate-x-0 translate-x-4 opacity-0 group-hover/sphere:opacity-100 pointer-events-none group-hover/sphere:pointer-events-auto`} 
+                            title="Küreye Resim Ekle"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${hasSphereTexture ? 'animate-bounce' : ''}`}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                         </button>
                         {/* Ana Küre Butonu */}
-                        <button onClick={() => handleShapeSelect('sphere')} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 bg-black/60 backdrop-blur text-white hover:scale-110 hover:bg-white/20 z-10 animate-in zoom-in duration-300" title="Küre">
+                        <button onClick={() => handleShapeSelect('sphere')} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 bg-black/60 backdrop-blur text-white hover:scale-110 hover:bg-white/20 z-10 animate-in zoom-in duration-300 relative" title="Küre">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle></svg>
                         </button>
                     </div>
 
                     {/* Küp Butonu (Wrapper ile) */}
-                    <div className="theme-menu-item item-2 relative flex items-center justify-center w-full group/cube mb-1">
-                        {/* Doku Butonu (Texture) */}
-                        <button disabled={!hasImage} className={`absolute right-full mr-1 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${hasImage ? 'bg-gray-900 border-2 border-purple-400 text-purple-200 shadow-[0_0_20px_purple] hover:bg-gray-800 hover:scale-110 animate-pulse' : 'bg-gray-900/80 text-gray-600 cursor-not-allowed border-gray-700 opacity-0'} group-hover/cube:opacity-100 group-hover/cube:delay-0 delay-150 translate-x-4 group-hover/cube:translate-x-0 pointer-events-none group-hover/cube:pointer-events-auto`} title={hasImage ? "Resim Dokusunu Uygula" : "Önce Resim Yükleyin"}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${hasImage ? 'animate-bounce' : ''}`}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <div className="theme-menu-item item-2 relative flex items-center justify-center w-full group/cube mb-1" style={{ overflow: 'visible' }}>
+                        {/* Doku Butonu (Texture) - Pop-up Tetiği */}
+                        <button 
+                            onClick={(e) => { e.stopPropagation(); setActiveTextureModal('cube'); setIsShapeMenuOpen(false); }}
+                            className={`absolute right-[100%] mr-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 z-[-1] ${hasCubeTexture ? 'bg-gray-900 border-2 border-purple-400 text-purple-200 shadow-[0_0_20px_purple] hover:bg-gray-800 hover:scale-110 animate-pulse' : 'bg-gray-900 border border-white/20 text-gray-400 hover:bg-purple-900/50 hover:text-purple-200 hover:border-purple-500/50'} group-hover/cube:translate-x-0 translate-x-4 opacity-0 group-hover/cube:opacity-100 pointer-events-none group-hover/cube:pointer-events-auto`} 
+                            title="Küpe Resim Ekle (Max 6)"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${hasCubeTexture ? 'animate-bounce' : ''}`}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                         </button>
                         {/* Ana Küp Butonu */}
-                        <button onClick={() => handleShapeSelect('cube')} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 bg-black/60 backdrop-blur text-white hover:scale-110 hover:bg-white/20 z-10 animate-in zoom-in duration-300" title="Küp">
+                        <button onClick={() => handleShapeSelect('cube')} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 bg-black/60 backdrop-blur text-white hover:scale-110 hover:bg-white/20 z-10 animate-in zoom-in duration-300 relative" title="Küp">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
                         </button>
                     </div>
@@ -501,6 +680,7 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
             
             {/* TEMA MENÜSÜ */}
             <div className="relative flex flex-col items-center"> 
+                {/* ... (Tema Butonları Aynı Kalıyor) ... */}
                 <button onClick={(e) => { e.stopPropagation(); toggleThemeMenu(); }} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border group z-20 relative ${isLightMode ? `border-black/20 text-black ${isThemeMenuOpen ? 'bg-black/20 scale-110' : 'bg-black/5 hover:bg-black/10'}` : `border-white/20 text-white ${isThemeMenuOpen ? 'bg-white/20 scale-110' : 'bg-white/5 hover:bg-white/10'}`}`} title="Tema ve Arka Plan">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-spin"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path><path d="M16 16.5l-3 3"></path><path d="M11 11.5l-3 3"></path></svg>
                 </button> 
@@ -523,6 +703,7 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
 
       {isSettingsOpen && ( 
         <div className={`absolute top-20 right-6 z-[60] w-80 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.8)] animate-config-pop origin-top-right cursor-default transition-colors duration-300 ${isLightMode ? 'bg-white/80 text-black border-black/10' : 'bg-[#0a0a0a]/90 text-white border-white/10'}`} onPointerDown={stopProp}> 
+            {/* ... (Ayarlar Menüsü Aynı Kalıyor) ... */}
             {/* Header */}
             <div className={`flex justify-between items-center border-b pb-3 mb-4 ${isLightMode ? 'border-black/10' : 'border-white/10'}`}> <div className="flex items-center gap-2"> <div className={`w-2 h-2 rounded-full ${isLightMode ? 'bg-black' : 'bg-white'} animate-pulse`}></div> <h4 className="text-sm font-bold tracking-wide font-mono uppercase">Sistem Ayarları</h4> </div> <button onClick={() => setIsSettingsOpen(false)} className={`p-1 rounded-full transition-colors ${isLightMode ? 'hover:bg-black/10' : 'hover:bg-white/10'}`}> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"></path></svg> </button> </div> 
             
@@ -591,6 +772,7 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
 
       {/* --- BOTTOM CONTROL BAR --- */}
       <div className="absolute bottom-10 left-0 w-full flex justify-center items-center pointer-events-none z-[100] px-4">
+        {/* ... (Bottom Bar Aynı Kalıyor) ... */}
         <div className={`pointer-events-auto w-full max-w-lg relative flex gap-2 items-center transition-transform duration-500 ${hideBottomClass}`} onPointerDown={stopProp}>
           {isPaletteOpen && ( <div className="absolute bottom-full right-0 translate-x-2 mb-2 bg-black/80 backdrop-blur-xl border border-white/20 p-2 rounded-xl shadow-2xl animate-in fade-in zoom-in duration-200 origin-bottom-right" onMouseEnter={() => onInteractionStart()} onMouseLeave={() => { if(!isDrawing) onColorChange(savedColor); onInteractionEnd(); }}> <div className="text-white/60 text-[10px] mb-1 font-mono text-center">Renk Seçici</div> <div className="w-48 h-32 rounded-lg cursor-crosshair relative overflow-hidden shadow-inner border border-white/10" onMouseMove={handleSpectrumMove} onClick={handleSpectrumClick} style={{ background: 'white' }}> <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)' }} /> <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)' }} /> </div> </div> )}
           
