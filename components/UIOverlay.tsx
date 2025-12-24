@@ -459,7 +459,7 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
       <button onClick={onToggleScene} className={`absolute bottom-6 right-20 z-[60] w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border backdrop-blur-md shadow-lg group ${hideBottomClass} ${isLightMode ? 'border-black/20 text-black bg-black/5 hover:bg-black/10' : 'border-white/20 text-white bg-white/10 hover:bg-white/20'}`} title={isSceneVisible ? "Nesneyi Gizle" : "Nesneyi Göster"}>{isSceneVisible ? (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-pulse"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><line x1="2" y1="2" x2="22" y2="22"></line></svg>)}</button>
       <button onClick={onToggleUI} className={`absolute bottom-6 right-6 z-[60] w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border backdrop-blur-md shadow-lg group ${isLightMode ? 'border-black/20 text-black bg-black/5 hover:bg-black/10' : 'border-white/20 text-white bg-white/10 hover:bg-white/20'}`} title={isUIHidden ? "Arayüzü Göster" : "Temiz Mod"}>{isUIHidden ? (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-spin"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-bounce"><line x1="5" y1="12" x2="19" y2="12"></line></svg>)}</button>
 
-      {/* --- SIDE MENU (THEME & SHAPE) - (BURASI KORUNDU) --- */}
+      {/* --- SIDE MENU (THEME & SHAPE) --- */}
       <div className={`absolute top-6 right-6 z-50 flex flex-col items-end gap-3 transition-transform duration-500 ${hideTopClass}`} onPointerDown={stopProp}>
           <div className="flex flex-row gap-4 items-start"> 
             {/* ŞEKİL MENÜSÜ */}
@@ -470,9 +470,9 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
                 <div className={`absolute top-full flex flex-col gap-0 items-center w-10 pt-2 ${isShapeMenuOpen ? 'shape-menu-open' : ''}`}> 
                     
                     {/* Küre Butonu (Wrapper ile) */}
-                    <div className="theme-menu-item item-1 relative flex items-center justify-end w-full group/sphere mb-1">
-                        <button disabled={!hasImage} className={`absolute right-full mr-2 w-8 h-8 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 ${hasImage ? 'bg-blue-600/80 text-white hover:bg-blue-500' : 'bg-gray-800/50 text-gray-500 cursor-not-allowed'} opacity-0 group-hover/sphere:opacity-100 translate-x-2 group-hover/sphere:translate-x-0 pointer-events-none group-hover/sphere:pointer-events-auto`} title={hasImage ? "Resim Dokusunu Uygula (Yakında)" : "Önce Resim Yükleyin"}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <div className="theme-menu-item item-1 relative flex items-center justify-end w-full group/sphere mb-1 pr-1">
+                        <button disabled={!hasImage} className={`absolute right-full mr-1 w-8 h-8 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 ${hasImage ? 'bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.6)] ring-1 ring-white/50 scale-100 opacity-100 hover:scale-110' : 'bg-gray-900/80 text-gray-600 cursor-not-allowed border-gray-700 opacity-0'} group-hover/sphere:opacity-100 group-hover/sphere:delay-0 delay-150 translate-x-4 group-hover/sphere:translate-x-0 pointer-events-none group-hover/sphere:pointer-events-auto`} title={hasImage ? "Resim Dokusunu Uygula (Yakında)" : "Önce Resim Yükleyin"}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${hasImage ? 'animate-bounce' : ''}`}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                         </button>
                         <button onClick={() => handleShapeSelect('sphere')} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all bg-black/60 backdrop-blur text-white hover:scale-110" title="Küre">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle></svg>
@@ -480,9 +480,9 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
                     </div>
 
                     {/* Küp Butonu (Wrapper ile) */}
-                    <div className="theme-menu-item item-2 relative flex items-center justify-end w-full group/cube mb-1">
-                        <button disabled={!hasImage} className={`absolute right-full mr-2 w-8 h-8 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 ${hasImage ? 'bg-blue-600/80 text-white hover:bg-blue-500' : 'bg-gray-800/50 text-gray-500 cursor-not-allowed'} opacity-0 group-hover/cube:opacity-100 translate-x-2 group-hover/cube:translate-x-0 pointer-events-none group-hover/cube:pointer-events-auto`} title={hasImage ? "Resim Dokusunu Uygula (Yakında)" : "Önce Resim Yükleyin"}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    <div className="theme-menu-item item-2 relative flex items-center justify-end w-full group/cube mb-1 pr-1">
+                        <button disabled={!hasImage} className={`absolute right-full mr-1 w-8 h-8 rounded-full border border-white/20 flex items-center justify-center transition-all duration-300 ${hasImage ? 'bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 text-white shadow-[0_0_15px_rgba(168,85,247,0.6)] ring-1 ring-white/50 scale-100 opacity-100 hover:scale-110' : 'bg-gray-900/80 text-gray-600 cursor-not-allowed border-gray-700 opacity-0'} group-hover/cube:opacity-100 group-hover/cube:delay-0 delay-150 translate-x-4 group-hover/cube:translate-x-0 pointer-events-none group-hover/cube:pointer-events-auto`} title={hasImage ? "Resim Dokusunu Uygula (Yakında)" : "Önce Resim Yükleyin"}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`${hasImage ? 'animate-bounce' : ''}`}><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                         </button>
                         <button onClick={() => handleShapeSelect('cube')} className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center transition-all bg-black/60 backdrop-blur text-white hover:scale-110" title="Küp">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
@@ -516,3 +516,140 @@ export const UIOverlay = forwardRef<HTMLInputElement, UIOverlayProps>(({
             </button> 
           </div> 
       </div>
+
+      {isSettingsOpen && ( 
+        <div className={`absolute top-20 right-6 z-[60] w-80 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 shadow-[0_30px_60px_rgba(0,0,0,0.8)] animate-config-pop origin-top-right cursor-default transition-colors duration-300 ${isLightMode ? 'bg-white/80 text-black border-black/10' : 'bg-[#0a0a0a]/90 text-white border-white/10'}`} onPointerDown={stopProp}> 
+            {/* Header */}
+            <div className={`flex justify-between items-center border-b pb-3 mb-4 ${isLightMode ? 'border-black/10' : 'border-white/10'}`}> <div className="flex items-center gap-2"> <div className={`w-2 h-2 rounded-full ${isLightMode ? 'bg-black' : 'bg-white'} animate-pulse`}></div> <h4 className="text-sm font-bold tracking-wide font-mono uppercase">Sistem Ayarları</h4> </div> <button onClick={() => setIsSettingsOpen(false)} className={`p-1 rounded-full transition-colors ${isLightMode ? 'hover:bg-black/10' : 'hover:bg-white/10'}`}> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"></path></svg> </button> </div> 
+            
+            <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 stylish-scrollbar"> 
+                {/* Physics Section */}
+                <div> <h5 className={`text-[10px] font-bold uppercase mb-3 opacity-60 flex items-center gap-2 ${isLightMode ? 'text-black' : 'text-white'}`}> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg> Fizik Motoru </h5> <div className="space-y-4"> <div className="group"> <div className="flex justify-between mb-1.5"> <span className="text-xs font-medium opacity-80">İtme Kuvveti</span> <span className="text-xs font-mono font-bold text-blue-500">%{repulsionStrength}</span> </div> <div className="relative h-1.5 w-full rounded-full bg-gray-500/20 overflow-hidden"> <div className="absolute top-0 left-0 h-full bg-blue-500 rounded-full transition-all duration-300" style={{ width: `${repulsionStrength}%` }}></div> <input type="range" min="0" max="100" value={repulsionStrength} onChange={(e) => onRepulsionChange(parseInt(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" /> </div> </div> <div className="group"> <div className="flex justify-between mb-1.5"> <span className="text-xs font-medium opacity-80">Etki Alanı</span> <span className="text-xs font-mono font-bold text-purple-500">%{repulsionRadius}</span> </div> <div className="relative h-1.5 w-full rounded-full bg-gray-500/20 overflow-hidden"> <div className="absolute top-0 left-0 h-full bg-purple-500 rounded-full transition-all duration-300" style={{ width: `${repulsionRadius}%` }}></div> <input type="range" min="10" max="100" value={repulsionRadius} onChange={(e) => onRadiusChange(parseInt(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" /> </div> </div> </div> </div> 
+                
+                {/* Structure Section */}
+                <div> <h5 className={`text-[10px] font-bold uppercase mb-3 opacity-60 flex items-center gap-2 ${isLightMode ? 'text-black' : 'text-white'}`}> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg> Partikül Yapısı </h5> <div className="space-y-4"> <div className="group"> <div className="flex justify-between mb-1.5"> <span className="text-xs font-medium opacity-80">Yoğunluk (Adet)</span> <span className="text-xs font-mono font-bold text-green-500">{(particleCount / 1000).toFixed(1)}k</span> </div> <div className="relative h-1.5 w-full rounded-full bg-gray-500/20 overflow-hidden"> <div className="absolute top-0 left-0 h-full bg-green-500 rounded-full transition-all duration-300" style={{ width: `${(particleCount - 20000) / (60000 - 20000) * 100}%` }}></div> <input type="range" min="20000" max="60000" step="1000" value={particleCount} onChange={(e) => handleCountChange(parseInt(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" /> </div> </div> <div className="group"> <div className="flex justify-between mb-1.5"> <span className="text-xs font-medium opacity-80">Boyut</span> <span className="text-xs font-mono font-bold text-yellow-500">{particleSize}px</span> </div> <div className="relative h-1.5 w-full rounded-full bg-gray-500/20 overflow-hidden"> <div className="absolute top-0 left-0 h-full bg-yellow-500 rounded-full transition-all duration-300" style={{ width: `${(particleSize / 50) * 100}%` }}></div> <input type="range" min="1" max="50" value={particleSize} onChange={(e) => onParticleSizeChange(parseInt(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" /> </div> </div> <div className="group"> <div className="flex justify-between mb-1.5"> <span className="text-xs font-medium opacity-80">Form Sıkılığı</span> <span className="text-xs font-mono font-bold text-orange-500">%{modelDensity}</span> </div> <div className="relative h-1.5 w-full rounded-full bg-gray-500/20 overflow-hidden"> <div className="absolute top-0 left-0 h-full bg-orange-500 rounded-full transition-all duration-300" style={{ width: `${modelDensity}%` }}></div> <input type="range" min="0" max="100" value={modelDensity} onChange={(e) => onModelDensityChange(parseInt(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" /> </div> </div> </div> </div> 
+                
+                {/* --- VISUAL EFFECTS SECTION (UPDATED) --- */}
+                <div>
+                  <h5 className={`text-[10px] font-bold uppercase mb-3 opacity-60 flex items-center gap-2 ${isLightMode ? 'text-black' : 'text-white'}`}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> Görsel Efektler
+                  </h5>
+                  
+                  {hasImage && ( 
+                    <div className="group mb-4"> 
+                      <div className="flex justify-between mb-1.5"> 
+                        <span className="text-xs font-medium opacity-80">3D Kabartma</span> 
+                        <span className="text-xs font-mono font-bold text-red-500">%{Math.round(depthIntensity * 10)}</span> 
+                      </div> 
+                      <div className="relative h-1.5 w-full rounded-full bg-gray-500/20 overflow-hidden"> 
+                        <div className="absolute top-0 left-0 h-full bg-red-500 rounded-full transition-all duration-300" style={{ width: `${(depthIntensity / 20) * 100}%` }}></div> 
+                        <input type="range" min="0" max="20" value={depthIntensity} onChange={(e) => onDepthChange(parseInt(e.target.value))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" /> 
+                      </div> 
+                    </div> 
+                  )}
+
+                  <div className="grid grid-cols-1 gap-2">
+                      {/* BLOOM TOGGLE */}
+                      <div className="flex items-center justify-between bg-white/5 p-2 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
+                          <div className="flex flex-col">
+                              <span className={`text-[10px] font-bold flex items-center gap-2 ${enableBloom ? 'text-pink-300' : 'text-gray-300'}`}>
+                                  {enableBloom && <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse shadow-[0_0_5px_#f472b6]"></span>}
+                                  Neon Parlama (Bloom)
+                              </span>
+                              <span className="text-[8px] text-gray-500 italic">Yüksek parlaklık efekti</span>
+                          </div>
+                          <button onClick={() => onToggleBloom && onToggleBloom()} className={`w-8 h-4 rounded-full relative transition-colors ${enableBloom ? 'bg-pink-600' : 'bg-white/10'}`}>
+                              <div className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-transform ${enableBloom ? 'translate-x-4' : 'translate-x-0'}`} />
+                          </button>
+                      </div>
+
+                      {/* TRAILS TOGGLE */}
+                      <div className="flex items-center justify-between bg-white/5 p-2 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
+                          <div className="flex flex-col">
+                              <span className={`text-[10px] font-bold flex items-center gap-2 ${enableTrails ? 'text-blue-300' : 'text-gray-300'}`}>
+                                  {enableTrails && <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_5px_#3b82f6]"></span>}
+                                  İz Efekti (Motion Blur)
+                              </span>
+                              <span className="text-[8px] text-gray-500 italic">Hız izleri bırakır</span>
+                          </div>
+                          <button onClick={() => onToggleTrails && onToggleTrails()} className={`w-8 h-4 rounded-full relative transition-colors ${enableTrails ? 'bg-blue-600' : 'bg-white/10'}`}>
+                              <div className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-transform ${enableTrails ? 'translate-x-4' : 'translate-x-0'}`} />
+                          </button>
+                      </div>
+                  </div>
+                </div>
+
+            </div> 
+            
+            <div className={`mt-6 pt-4 border-t flex justify-end ${isLightMode ? 'border-black/10' : 'border-white/10'}`}> <button onClick={onResetAll} className="px-4 py-2 rounded-lg text-xs font-bold text-white bg-red-600 hover:bg-red-500 transition-colors shadow-lg shadow-red-900/30 flex items-center gap-2"> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg> SIFIRLA </button> </div> 
+        </div> 
+      )}
+
+      {/* --- BOTTOM CONTROL BAR --- */}
+      <div className="absolute bottom-10 left-0 w-full flex justify-center items-center pointer-events-none z-[100] px-4">
+        <div className={`pointer-events-auto w-full max-w-lg relative flex gap-2 items-center transition-transform duration-500 ${hideBottomClass}`} onPointerDown={stopProp}>
+          {isPaletteOpen && ( <div className="absolute bottom-full right-0 translate-x-2 mb-2 bg-black/80 backdrop-blur-xl border border-white/20 p-2 rounded-xl shadow-2xl animate-in fade-in zoom-in duration-200 origin-bottom-right" onMouseEnter={() => onInteractionStart()} onMouseLeave={() => { if(!isDrawing) onColorChange(savedColor); onInteractionEnd(); }}> <div className="text-white/60 text-[10px] mb-1 font-mono text-center">Renk Seçici</div> <div className="w-48 h-32 rounded-lg cursor-crosshair relative overflow-hidden shadow-inner border border-white/10" onMouseMove={handleSpectrumMove} onClick={handleSpectrumClick} style={{ background: 'white' }}> <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)' }} /> <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,1) 100%)' }} /> </div> </div> )}
+          
+          {/* --- CANLI SOHBET BUTONU (GEMINI LIVE) --- */}
+          {!isDrawing && (
+              <button
+                  onClick={onToggleLive}
+                  className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 border mr-1 group relative overflow-hidden ${
+                      isLiveActive 
+                        ? (liveStatus === 'speaking' 
+                            ? 'bg-green-500/20 text-green-300 border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.4)]' 
+                            : (liveStatus === 'connecting' ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50 animate-pulse' : 'bg-blue-500/20 text-blue-300 border-blue-500/50'))
+                        : (isLightMode 
+                            ? 'bg-black/5 hover:bg-black/10 border-black/20 hover:border-blue-500 text-black/80 hover:text-blue-600' 
+                            : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-blue-400 text-white hover:text-blue-300')
+                  }`}
+                  title={isLiveActive ? (liveStatus === 'speaking' ? "Konuşuyor..." : "Dinliyor...") : "Asistanla Sohbet Et"}
+                  onMouseEnter={onInteractionStart} 
+                  onMouseLeave={onInteractionEnd}
+              >
+                  {/* Rings for speaking state */}
+                  {isLiveActive && liveStatus === 'speaking' && (
+                      <>
+                        <div className="absolute inset-0 rounded-full border border-green-400 opacity-0 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
+                        <div className="absolute inset-0 rounded-full border border-green-400 opacity-0 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite_0.5s]"></div>
+                      </>
+                  )}
+
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill={isLiveActive ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`relative z-10 transition-transform duration-300 ${isLiveActive ? '' : 'group-hover:scale-110'} ${liveStatus === 'speaking' ? 'animate-bounce' : ''}`}>
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                      <line x1="12" y1="19" x2="12" y2="23"></line>
+                      <line x1="8" y1="23" x2="16" y2="23"></line>
+                  </svg>
+              </button>
+          )}
+
+          {!isDrawing && (
+              <button 
+                onClick={() => { setShowAudioModal(true); onInteractionStart(); }} 
+                className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 border ${audioMode !== 'none' ? 'bg-green-500/20 text-green-300 border-green-500/50' : isLightMode ? 'bg-black/5 hover:bg-black/10 border-black/20 hover:border-black/50 text-black/80' : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/50 text-white'}`} 
+                title="Müzik/Ses Ekle" 
+                onMouseEnter={onInteractionStart} onMouseLeave={onInteractionEnd}
+              >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-wiggle"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle></svg>
+              </button>
+          )}
+          
+          {!isDrawing && (<button onClick={() => fileInputRef.current?.click()} className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 border ${isLightMode ? 'bg-black/5 hover:bg-black/10 border-black/20 hover:border-black/50 text-black/80' : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/50 text-white'}`} title="Resim Yükle" onMouseEnter={onInteractionStart} onMouseLeave={onInteractionEnd}><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-bounce"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></button>)}
+          <button onClick={isDrawing ? cancelDrawing : onDrawingStart} className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 border ${isDrawing ? 'bg-red-500/20 text-red-200 border-red-500/50 hover:bg-red-500/40' : isLightMode ? 'bg-black/5 hover:bg-black/10 border-black/20 hover:border-black/50 text-black/80' : 'bg-white/10 hover:bg-white/20 border-white/20 hover:border-white/50 text-white'}`} title={isDrawing ? "Çizimi İptal Et" : "Çizim Yap"} onMouseEnter={onInteractionStart} onMouseLeave={onInteractionEnd}>{isDrawing ? (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-wiggle"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-bounce"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>)}</button>
+          
+          {!isDrawing && (<input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} onKeyDown={handleKeyDown} onFocus={() => onInteractionStart()} onBlur={() => onInteractionEnd()} placeholder="Metin yazın (Türkçe destekli)..." className={`flex-1 backdrop-blur-md border rounded-full px-6 py-4 outline-none transition-all duration-300 shadow-lg text-center font-light tracking-wide text-lg ${isLightMode ? 'bg-black/5 border-black/10 text-black placeholder-gray-500 focus:bg-black/10 focus:border-black/30' : 'bg-white/10 border-white/20 text-white placeholder-gray-400 focus:bg-white/20 focus:border-white/50'}`} />)}
+
+          {isDrawing && (<button onClick={onDrawingConfirm} className="w-16 flex-shrink-0 bg-green-500/20 hover:bg-green-500/30 border border-green-500/50 hover:border-green-400 text-green-100 rounded-full px-2 py-4 transition-all duration-300 shadow-lg text-center font-light tracking-wide flex items-center justify-center gap-2 group" title="Çizimi Dönüştür"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform icon-animate-pulse"><polyline points="20 6 9 17 4 12"></polyline></svg></button>)}
+          <div className="flex items-center gap-2">
+            {hasImage && !isOriginalColors && !isDrawing && (<button onClick={onResetColors} className="w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center bg-gradient-to-tr from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 transition-all duration-300 border border-white/20 hover:border-white/50 text-white/80 hover:text-white animate-in fade-in zoom-in group" title="Orijinal Renklere Dön" onMouseEnter={onInteractionStart} onMouseLeave={onInteractionEnd}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-spin"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></button>)}
+            <button onClick={() => setIsPaletteOpen(!isPaletteOpen)} className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 border-2 z-20 group ${isLightMode ? 'bg-black/5 hover:bg-black/20 border-black/20 hover:border-black shadow-[0_0_15px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(0,0,0,0.3)]' : 'bg-white/5 hover:bg-white/20 border-white/20 hover:border-white shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]'}`} title="Renk Paletini Aç" onMouseEnter={onInteractionStart} onMouseLeave={onInteractionEnd}><div className={`w-6 h-6 rounded-full shadow-sm icon-animate-pulse ${isLightMode ? 'border border-black/20' : 'border border-white/50'}`} style={{ backgroundColor: currentColor }} /></button>
+             <button onClick={isDrawing ? onClearCanvas : onResetAll} className={`w-10 h-10 flex-shrink-0 rounded-full flex items-center justify-center transition-all duration-300 border group ${isDrawing ? 'bg-orange-500/10 hover:bg-orange-500/30 hover:border-orange-400 border-white/20 text-white/70 hover:text-white' : isLightMode ? 'bg-red-500/10 hover:bg-red-500/30 hover:border-red-400 border-black/20 text-black/70 hover:text-black' : 'bg-red-500/10 hover:bg-red-500/30 hover:border-red-400 border-white/20 text-white/70 hover:text-white'}`} title="Tuvali Temizle" onMouseEnter={onInteractionStart} onMouseLeave={onInteractionEnd}>{isDrawing ? (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-wiggle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon-animate-spin"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 16h5v5"></path></svg>)}</button>
+          </div>
+        </div>
+        {!isDrawing && (<div className={`absolute -bottom-6 text-center text-[10px] font-mono opacity-50 ${isLightMode ? 'text-black' : 'text-gray-500'}`}>Küre moduna dönmek için boş Enter</div>)}
+      </div>
+
+    </>
+  );
+});
